@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { SET_COUNT } from "./store/flight/flightSlice";
-import { ToastContainer, toast, Slide, Flip } from "react-toastify";
-import "./style/home.css";
-import "react-toastify/dist/ReactToastify.css";
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {useNavigate} from "react-router-dom"
+import {SET_COUNT} from "./store/flight/flightSlice"
+import {ToastContainer, toast, Slide} from "react-toastify"
+import "./style/home.css"
+import "react-toastify/dist/ReactToastify.css"
 
 export default function Home() {
-  const [flights, setFlights] = useState([]);
-  const [count, setCount] = useState(1);
-  const [error, setError] = useState("");
-  const [states, setState] = useState([
+  const [flights, setFlights] = useState([])
+  const [count, setCount] = useState(1)
+  const [error, setError] = useState("")
+  const [states] = useState([
     "chennai",
     "delhi",
     "mumbai",
@@ -18,21 +18,21 @@ export default function Home() {
     "Kolkata",
     "kerala",
     "pune",
-  ]);
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const base_url = process.env.REACT_APP_BASE_URL;
+  ])
+  const [origin, setOrigin] = useState("")
+  const [destination, setDestination] = useState("")
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const base_url = process.env.REACT_APP_BASE_URL
 
-  useEffect(() => {}, []);
+  useEffect(() => {}, [])
 
   const handleFlightSearch = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const formData = new FormData(e.target);
-      setCount(e.target.passengers.value);
-      const requestData = JSON.stringify(Object.fromEntries(formData));
+      const formData = new FormData(e.target)
+      setCount(e.target.passengers.value)
+      const requestData = JSON.stringify(Object.fromEntries(formData))
       const settings = {
         method: "POST",
         body: requestData,
@@ -40,31 +40,31 @@ export default function Home() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      };
-      const response = await fetch(`${base_url}/api/v1/flight/find`, settings);
-      const data = await response.json();
+      }
+      const response = await fetch(`${base_url}/api/v1/flight/find`, settings)
+      const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.message);
+        throw new Error(data.message)
       }
       if (response.ok && data) {
-        setFlights(data);
+        setFlights(data)
       }
     } catch (error) {
-      setError(error.message);
-      setFlights([]);
+      setError(error.message)
+      setFlights([])
       toast.warning(error.message, {
         transition: Slide,
-      });
-      console.log(error);
+      })
+      console.log(error)
     }
-  };
+  }
 
   const handleRedirectBooking = (flight) => {
-    const res = dispatch(SET_COUNT(count));
+    const res = dispatch(SET_COUNT(count))
     if (res) {
-      navigate(`/flight/${flight.id}`);
+      navigate(`/flight/${flight.id}`)
     }
-  };
+  }
   return (
     <div className="App">
       <ToastContainer
@@ -97,7 +97,7 @@ export default function Home() {
                         <option key={i} value={state}>
                           {state}
                         </option>
-                      );
+                      )
                     })}
                 </select>
               </div>
@@ -105,9 +105,9 @@ export default function Home() {
                 role="button"
                 className="text-center "
                 onClick={() => {
-                  let temp = origin;
-                  setOrigin(destination);
-                  setDestination(temp);
+                  let temp = origin
+                  setOrigin(destination)
+                  setDestination(temp)
                 }}
               >
                 <i className="bi bi-arrow-down-up fw-bolder fs-5"></i>
@@ -130,7 +130,7 @@ export default function Home() {
                         <option key={i} value={state}>
                           {state}
                         </option>
-                      );
+                      )
                     })}
                 </select>
               </div>
@@ -167,7 +167,7 @@ export default function Home() {
           </div>
           <div
             className="col-md-8 column overflow-auto"
-            style={{ marginTop: "5%" }}
+            style={{marginTop: "5%"}}
           >
             <table className="table ">
               <thead>
@@ -195,7 +195,7 @@ export default function Home() {
                       <td>{flight.arrivalTime}</td>
                       <td>{flight.fare.fare}</td>
                     </tr>
-                  );
+                  )
                 })}
               </tbody>
             </table>
@@ -208,63 +208,9 @@ export default function Home() {
         </div>
       </div>
       <div
-        style={{ marginTop: "20%" }}
+        style={{marginTop: "20%"}}
         className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary"
       ></div>
-      {/* <main classNameName="my-form">
-        <div classNameName="container align-center col-sm-8">
-          <div classNameName="row justify-content-center">
-            <div classNameName="col-md-12">
-              <div classNameName="card border-light w-auto special-card">
-                <div classNameName="card-header border-light text-center">
-                  Search Flights
-                </div>
-                <div classNameName="card-body">
-                  <form name="searchFlightsForm" method="post" role="form">
-                    <div classNameName="row searchForm">
-                      <div classNameName="col-lg-12">
-                        <div classNameName="row">
-                          <div classNameName="col-md-2 col-sm-3 col-sm-12 ">
-                            <input
-                              classNameName="form-control"
-                              id="origin"
-                              name="origin"
-                              placeholder="Origin"
-                              type="text"
-                            />
-                          </div>
-                          <div classNameName="col-sm-2 col-md-3 col-sm-12">
-                            <input
-                              classNameName="form-control"
-                              id="destination"
-                              name="destination"
-                              placeholder="Destination"
-                              type="text"
-                            />
-                          </div>
-                          <div classNameName="col-sm-2 col-md-3 col-sm-12 ">
-                            <input
-                              type="date"
-                              id="date"
-                              classNameName="form-control search-slt"
-                              placeholder="Travel Date"
-                            />
-                          </div>
-                          <div classNameName="col-sm-2 col-md-3 col-sm-12">
-                            <button type="submit" classNameName="btn btn-primary">
-                              Search Flight
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main> */}
     </div>
-  );
+  )
 }

@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import "./style/ticket.css";
+import React, {useEffect, useState} from "react"
+import {Link, useNavigate, useParams} from "react-router-dom"
+import "./style/ticket.css"
 
 function SuccessCheckin() {
-  const [booking, setBooking] = useState();
-  const [error, setError] = useState("");
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const base_url = process.env.REACT_APP_BASE_URL;
+  const [booking, setBooking] = useState()
+  const [error, setError] = useState("")
+  const {id} = useParams()
+  const navigate = useNavigate()
+  const base_url = process.env.REACT_APP_BASE_URL
 
   const handleFetchCheckin = async () => {
     try {
-      const response = await fetch(`${base_url}/api/v1/checkin/${id}`);
-      const data = await response.json();
+      const response = await fetch(`${base_url}/api/v1/checkin/${id}`)
+      const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.message);
+        throw new Error(data.message)
       }
       if (response.ok) {
-        setBooking(data);
+        setBooking(data)
       }
     } catch (error) {
-      console.log(error);
-      setError(error.message);
-      navigate("*", { replace: true });
+      console.log(error)
+      setError(error.message)
+      navigate("*", {replace: true})
     }
-  };
+  }
 
   useEffect(() => {
-    handleFetchCheckin();
-  }, []);
+    handleFetchCheckin()
+  }, [])
 
   return (
     <div className="container">
@@ -177,7 +177,7 @@ function SuccessCheckin() {
             <button
               className=" btn btn-secondary"
               onClick={() => {
-                window.print();
+                window.print()
               }}
             >
               Print
@@ -186,7 +186,7 @@ function SuccessCheckin() {
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default SuccessCheckin;
+export default SuccessCheckin

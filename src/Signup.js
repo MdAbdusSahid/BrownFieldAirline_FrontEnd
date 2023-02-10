@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { REGEX_TEXT } from "./constant/constant";
-import "./style/signup.css";
+import React, {useEffect, useState} from "react"
+import {useSelector} from "react-redux"
+import {Link, useNavigate} from "react-router-dom"
+import {REGEX_TEXT} from "./constant/constant"
+import "./style/signup.css"
 
 export default function Signup() {
-  const user = useSelector((state) => state.user.loggedIn);
-  const [error, setError] = useState();
-  const navigate = useNavigate();
-  const base_url = process.env.REACT_APP_BASE_URL;
+  const user = useSelector((state) => state.user.loggedIn)
+  const [error, setError] = useState()
+  const navigate = useNavigate()
+  const base_url = process.env.REACT_APP_BASE_URL
 
   useEffect(() => {
     if (user) {
-      return navigate("/");
+      return navigate("/")
     }
-  });
+  })
 
   const handleUserRegistration = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const password1 = e.target.password.value;
-      const password2 = e.target.password_repeat.value;
+      const password1 = e.target.password.value
+      const password2 = e.target.password_repeat.value
       if (password1 !== password2) {
-        throw new Error("passwords do not match");
+        throw new Error("passwords do not match")
       }
-      const formData = new FormData(e.target);
-      const requestData = JSON.stringify(Object.fromEntries(formData));
+      const formData = new FormData(e.target)
+      const requestData = JSON.stringify(Object.fromEntries(formData))
       const settings = {
         method: "POST",
         body: requestData,
@@ -33,26 +33,23 @@ export default function Signup() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      };
-      const response = await fetch(
-        `${base_url}/api/v1/user/register`,
-        settings
-      );
-      const data = await response.json();
+      }
+      const response = await fetch(`${base_url}/api/v1/user/register`, settings)
+      const data = await response.json()
       if (response.status !== 201) {
-        throw new Error(data.message);
+        throw new Error(data.message)
       }
       if (response.status === 201 && data) {
-        navigate("/login");
+        navigate("/login")
       }
     } catch (error) {
-      setError(error.message);
-      console.log(error);
+      setError(error.message)
+      console.log(error)
     }
-  };
+  }
   function lettersOnly(input) {
-    let regex = /[^a-zA-z]/gi;
-    input.target.value = input.target.value.replace(regex, "");
+    let regex = /[^a-zA-z]/gi
+    input.target.value = input.target.value.replace(regex, "")
   }
   return (
     <div>
@@ -61,7 +58,7 @@ export default function Signup() {
           <div className="container h-100 ">
             <div className="row d-flex justify-content-center align-items-center h-100">
               <div className="col-12 col-md-9 col-lg-7 col-xl-6">
-                <div className="card" style={{ borderRadius: "15px" }}>
+                <div className="card" style={{borderRadius: "15px"}}>
                   <div className="card-body p-5">
                     {error && (
                       <div className="alert alert-danger text-center">
@@ -83,7 +80,7 @@ export default function Signup() {
                           title="Please enter a valid name"
                           required
                           onKeyUp={(e) => {
-                            lettersOnly(e);
+                            lettersOnly(e)
                           }}
                         />
                         <label className="form-label" htmlFor="firstName">
@@ -101,7 +98,7 @@ export default function Signup() {
                           title="Please enter a valid name"
                           required
                           onKeyUp={(e) => {
-                            lettersOnly(e);
+                            lettersOnly(e)
                           }}
                         />
                         <label className="form-label" htmlFor="lastName">
@@ -182,101 +179,6 @@ export default function Signup() {
           </div>
         </div>
       </section>
-      {/* <div classNameName="row col-md-6 offset-md-3">
-        <div classNameName="card">
-          <div classNameName="mb-3 mt-3">
-            <h4 classNameName="text-center fw-normal">Sign Up</h4>
-          </div>
-          {error && <div classNameName="alert alert-danger">{error}</div>}
-
-          <div classNameName="card-body">
-            <form classNameName="reg_form" onSubmit={handleUserRegistration}>
-              <div classNameName="row row-cols-2">
-                <div classNameName="form-group mb-3">
-                  <label classNameName="form-label">First Name</label>
-                  <input
-                    classNameName="form-control"
-                    id="firstName"
-                    name="firstName"
-                    placeholder="Enter first name"
-                    type="text"
-                    required
-                  />
-                </div>
-
-                <div classNameName="form-group mb-3">
-                  <label classNameName="form-label">Last Name</label>
-                  <input
-                    classNameName="form-control"
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Enter last name"
-                    type="text"
-                    required
-                  />
-                </div>
-
-                <div classNameName="form-group mb-3">
-                  <label classNameName="form-label">Email</label>
-                  <input
-                    classNameName="form-control"
-                    id="emailAddress"
-                    name="emailAddress"
-                    placeholder="Enter email address"
-                    type="email"
-                    required
-                  />
-                </div>
-
-                <div classNameName="form-group mb-3">
-                  <label classNameName="form-label">Phone</label>
-                  <input
-                    classNameName="form-control"
-                    id="mobileNumber"
-                    name="mobileNumber"
-                    placeholder="Enter phone"
-                    type="number"
-                    required
-                  />
-                </div>
-
-                <div classNameName="form-group mb-3">
-                  <label classNameName="form-label">Password</label>
-                  <input
-                    classNameName="form-control"
-                    id="password"
-                    name="password"
-                    placeholder="*****"
-                    type="password"
-                    required
-                  />
-                </div>
-                <div classNameName="form-group mb-3">
-                  <label classNameName="form-label">Confirm Password</label>
-                  <input
-                    classNameName="form-control"
-                    id="confirm_password"
-                    name="confirm_password"
-                    placeholder="*****"
-                    type="password"
-                    required
-                  />
-                </div>
-              </div>
-              <div classNameName="form-group mb-3 text-center">
-                <button classNameName="reg_btn btn btn-primary " type="submit">
-                  Register
-                </button>
-              </div>
-              <div classNameName="text-center">
-                <p>
-                  Already registered? <Link to="/login">Login here</Link>
-                </p>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div> */}
     </div>
-  );
+  )
 }

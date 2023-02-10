@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit"
 
 export const authSlice = createSlice({
   name: "user",
@@ -8,17 +8,15 @@ export const authSlice = createSlice({
   },
   reducers: {
     LOG_IN: (state, action) => {
-      state.data = action.payload;
-      state.loggedIn = true;
+      state.data = action.payload
+      state.loggedIn = true
     },
     LOG_OUT: (state) => {
-      state.data = null;
-      state.loggedIn = false;
+      state.data = null
+      state.loggedIn = false
     },
   },
-});
+})
+export const {LOG_IN, LOG_OUT} = authSlice.actions
 
-// Action creators are generated for each case reducer function
-export const { LOG_IN, LOG_OUT } = authSlice.actions;
-
-export default authSlice.reducer;
+export default authSlice.reducer

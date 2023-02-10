@@ -1,50 +1,47 @@
-import React, { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { Slide, toast, ToastContainer } from "react-toastify";
+import React, {useRef, useState} from "react"
+import {useNavigate} from "react-router-dom"
+import {Slide, toast, ToastContainer} from "react-toastify"
 
 function Checkin() {
-  const [booking, setBooking] = useState();
-  const [loading, setLoading] = useState(false);
-  const [passenger, setPassenger] = useState();
-  const [confirm, setConfirm] = useState(false);
-  const [checkInDisabled, SetCheckInDisabled] = useState(false);
-  const [error, setError] = useState("");
-  const closeRef = useRef();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const base_url = process.env.REACT_APP_BASE_URL;
+  const [booking, setBooking] = useState()
+  const [passenger, setPassenger] = useState()
+  const [confirm, setConfirm] = useState(false)
+  const [checkInDisabled, SetCheckInDisabled] = useState(false)
+  const [error, setError] = useState("")
+  const closeRef = useRef()
+  const navigate = useNavigate()
+  const base_url = process.env.REACT_APP_BASE_URL
 
   const fetchBooking = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const pnr = e.target.pnr.value;
-      const response = await fetch(`${base_url}/api/v1/book/pnr/${pnr}`);
-      const data = await response.json();
+      const pnr = e.target.pnr.value
+      const response = await fetch(`${base_url}/api/v1/book/pnr/${pnr}`)
+      const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message);
+        throw new Error(data.message)
       }
       if (response.ok) {
         const departure_date_time = new Date(
           `${data.flightDate}T${data.departureTime}`
-        );
-        const date_now = new Date();
-        const hours = (departure_date_time - date_now) / 3600000;
+        )
+        const date_now = new Date()
+        const hours = (departure_date_time - date_now) / 3600000
         if (date_now > departure_date_time || hours > 24 || hours < 1) {
-          SetCheckInDisabled(true);
+          SetCheckInDisabled(true)
         }
-        console.log(hours);
-        setBooking(data);
+        console.log(hours)
+        setBooking(data)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       toast.warning(error.message, {
         transition: Slide,
-      });
-      setError(error.message);
+      })
+      setError(error.message)
     }
-  };
+  }
 
   const handleCheckin = async () => {
     try {
@@ -55,7 +52,7 @@ function Checkin() {
         passenger: {
           passengerId: passenger.passengerId,
         },
-      };
+      }
       const settings = {
         method: "POST",
         body: JSON.stringify(requestData),
@@ -63,24 +60,24 @@ function Checkin() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-      };
-      const response = await fetch(`${base_url}/api/v1/checkin/save`, settings);
-      const data = await response.json();
+      }
+      const response = await fetch(`${base_url}/api/v1/checkin/save`, settings)
+      const data = await response.json()
       if (response.status !== 201) {
-        throw new Error(data);
+        throw new Error(data)
       }
       if (response.status === 201 && data) {
-        closeRef.current.click();
-        navigate(`/checkin/success/${data.checkinId}`);
+        closeRef.current.click()
+        navigate(`/checkin/success/${data.checkinId}`)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
       toast.warning(error.message, {
         transition: Slide,
-      });
-      setError(error.message);
+      })
+      setError(error.message)
     }
-  };
+  }
   return (
     <div className="container">
       <ToastContainer
@@ -94,9 +91,6 @@ function Checkin() {
         onSubmit={fetchBooking}
       >
         <div className="form-group d-flex gap-2">
-          {/* <label for="origin" className="text-center">
-                Enter PNR
-              </label> */}
           <input
             type="text"
             id="pnr"
@@ -153,7 +147,7 @@ function Checkin() {
                   <p className="card-text">{passenger.mobileNumber}</p>
                   <button
                     type="button"
-                    className={`btn ${loading && "disabled"} ${
+                    className={`btn ${
                       passenger.checked_in || checkInDisabled
                         ? "disabled btn-secondary"
                         : "btn-primary"
@@ -165,7 +159,7 @@ function Checkin() {
                     Check-in
                   </button>
                 </div>
-              );
+              )
             })}
             <div className="d-flex justify-content-between align-items-center">
               <p className="card-text">
@@ -231,7 +225,7 @@ function Checkin() {
                   id="checkbox"
                   type="checkbox"
                   onClick={() => {
-                    setConfirm(!confirm);
+                    setConfirm(!confirm)
                   }}
                 />
                 <label htmlFor="checkbox">
@@ -262,7 +256,7 @@ function Checkin() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Checkin;
+export default Checkin

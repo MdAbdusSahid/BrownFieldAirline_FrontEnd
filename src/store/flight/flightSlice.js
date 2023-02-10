@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit"
 
 export const flightSlice = createSlice({
   name: "flight",
@@ -9,27 +9,26 @@ export const flightSlice = createSlice({
   },
   reducers: {
     SELECT_FLIGHT: (state, action) => {
-      state.data = action.payload;
+      state.data = action.payload
     },
     REMOVE_FLIGHT: (state) => {
-      state.data = null;
+      state.data = null
     },
     ADD_PASSENGER: (state, action) => {
-      state.passengers = action.payload;
+      state.passengers = action.payload
     },
     REMOVE_PASSENGER: (state) => {
-      state.passengers = [];
+      state.passengers = []
     },
     SET_COUNT: (state, action) => {
-      state.count = action.payload;
+      state.count = action.payload
     },
     RESET_COUNT: (state) => {
-      state.count = 1;
+      state.count = 1
     },
   },
-});
+})
 
-// Action creators are generated for each case reducer function
 export const {
   SELECT_FLIGHT,
   REMOVE_FLIGHT,
@@ -37,6 +36,6 @@ export const {
   REMOVE_PASSENGER,
   SET_COUNT,
   RESET_COUNT,
-} = flightSlice.actions;
+} = flightSlice.actions
 
-export default flightSlice.reducer;
+export default flightSlice.reducer
